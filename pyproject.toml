@@ -1,0 +1,14 @@
+[project]
+name = "kaggle-competition-template"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "jupyterlab>=4.6.2",
+    "kaggle>=2.2.4",
+    "pandas>=3.0.5",
+]
+
+# コンペごとに `uv add` で追加し uv.lock をコミットする。
+# 例: torch（学習系）, kaggle-environments（シミュレーションコンペ）, lightgbm, etc.

@@ -1,0 +1,44 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Bash(ls *)",
+      "Bash(tree *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(du *)",
+      "Bash(echo *)",
+      "Bash(mkdir *)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Bash(git show*)",
+      "Bash(git branch*)",
+      "Bash(nvidia-smi*)",
+      "Bash(uv run *)",
+      "Bash(uv sync*)",
+      "Bash(.venv/bin/python *)",
+      "Bash(.venv/Scripts/python* *)",
+      "Bash(MPLBACKEND=Agg uv run *)",
+      "Bash(MPLBACKEND=Agg .venv/bin/python *)",
+      "Bash(uv run pytest *)",
+      "Bash(uv run pytest)",
+      "Bash(kaggle *)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:arxiv.org)"
+    ],
+    "deny": [
+      "Read(./.env)"
+    ],
+    "ask": [
+      "Bash(kaggle competitions submit*)",
+      "Bash(uv run kaggle competitions submit*)"
+    ]
+  }
+}

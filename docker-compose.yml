@@ -1,0 +1,34 @@
+# 研究室共有サーバー用の開発コンテナ。uv 公式イメージをほぼ素のまま使う
+#   docker compose up -d --build && docker exec -it kaggle-dev1 bash
+# 新しいコンペ用にこのテンプレートから複製したら、container_name / name を
+# リポジトリごとに一意な番号（kaggle-dev1, kaggle-dev2, ...）に変更する。
+name: kaggle-dev1
+
+services:
+  dev:
+    container_name: kaggle-dev1
+    image: kaggle-dev:latest
+    build:
+      context: .
+      # FROM のみ（uv 公式イメージを kaggle-dev 名に落とし込むためだけのビルド）。
+      # ツール追加が必要になったらここに RUN を足す。再現性を厳密にするなら digest 固定。
+      dockerfile_inline: |
+        FROM ghcr.io/astral-sh/uv:python3.12-bookworm
+    init: true
+    runtime: nvidia    # GPU 不要なコンペではこの行と NVIDIA_* を削除してよい（Compose v2.18 は `gpus: all` 未対応のため nvidia ランタイムを使う）
+    shm_size: "16gb"   # DataLoader(num_workers>0) / multiprocessing は shm 経由。既定 64MB だと Bus error
+    # ホストと同じ UID:GID で動かし、生成物の所有権をホストと一致させる（値は .env・未設定ならエラー）。
+    user: "${HOST_UID:?set HOST_UID in .env}:${HOST_GID:?set HOST_GID in .env}"
+    working_dir: /workspace
+    environment:
+      HOME: /workspace          # 非 root 実行はコンテナ内にホームが無いため書き込める場所を HOME にする
+      # キャッシュを bind mount 上に置き、.venv と同一マウントにして uv のハードリンクを効かせる。
+      XDG_CACHE_HOME: /workspace/.cache
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    volumes:
+      - .:/workspace
+      - /etc/passwd:/etc/passwd:ro    # コンテナ内で UID をユーザー名に解決させる
+      - /etc/group:/etc/group:ro
+    tty: true
+    command: bash
