@@ -31,7 +31,10 @@ COMP=$KAGGLE_COMPETITION   # .env に定義（source 済みでなければ `set 
 
 ```bash
 # 取得（メタデータ込み。-m が重要 — dataset_sources の確認に使う）
-kaggle kernels pull <owner>/<slug> -p reference/notebooks/raw/ -m
+# 必ず <slug> ごとのサブディレクトリを指定する — フラットな reference/notebooks/raw/ 直下に
+# 複数ノートブックを続けて pull すると、同名ファイル（kernel-metadata.json 等）が上書きされて
+# 前のノートブックの取得結果が消える。
+kaggle kernels pull <owner>/<slug> -p reference/notebooks/raw/<slug>/ -m
 ```
 
 ## Step 3: 要約へ引き継ぎ
