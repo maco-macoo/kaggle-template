@@ -1,16 +1,16 @@
 # 研究室共有サーバー用の開発コンテナ。uv 公式イメージをほぼ素のまま使う
-#   docker compose up -d --build && docker exec -it kaggle-dev1 bash
+#   docker compose up -d --build && docker exec -it sato-dev1 bash
 # 新しいコンペ用にこのテンプレートから複製したら、container_name / name を
-# リポジトリごとに一意な番号（kaggle-dev1, kaggle-dev2, ...）に変更する。
-name: kaggle-dev1
+# リポジトリごとに一意な番号（sato-dev1, sato-dev2, ...）に変更する。
+name: sato-dev1
 
 services:
   dev:
-    container_name: kaggle-dev1
-    image: kaggle-dev:latest
+    container_name: sato-dev1
+    image: sato-dev:latest
     build:
       context: .
-      # FROM のみ（uv 公式イメージを kaggle-dev 名に落とし込むためだけのビルド）。
+      # FROM のみ（uv 公式イメージを sato-dev 名に落とし込むためだけのビルド）。
       # ツール追加が必要になったらここに RUN を足す。再現性を厳密にするなら digest 固定。
       dockerfile_inline: |
         FROM ghcr.io/astral-sh/uv:python3.12-bookworm

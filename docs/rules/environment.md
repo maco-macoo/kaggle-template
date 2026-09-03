@@ -2,14 +2,14 @@
 
 - 実行環境は 2 系統。**どちらも環境の正本は `uv.lock`**:
   - **Windows ローカル**: PowerShell + uv 直（Docker 不使用）。CPU のみを想定。
-  - **研究室共有 Linux サーバー**: Docker（`docker compose up -d --build` → `docker exec -it kaggle-dev1 bash`）。
+  - **研究室共有 Linux サーバー**: Docker（`docker compose up -d --build` → `docker exec -it sato-dev1 bash`）。
     `HOST_UID` / `HOST_GID` は `.env` に置く（`.env.example` 参照）。
-- **イメージとコンテナの命名**: イメージ `kaggle-dev:latest` は uv 公式イメージをそのまま落とし込んだもので、
+- **イメージとコンテナの命名**: イメージ `sato-dev:latest` は uv 公式イメージをそのまま落とし込んだもので、
   リポジトリ横断で共用してよい（compose の `dockerfile_inline` が FROM のみ。ツール追加が要るときだけ RUN を足す）。
-  コンテナはリポジトリごとに1つ、`kaggle-dev1`, `kaggle-dev2`, ... と番号を振る。
+  コンテナはリポジトリごとに1つ、`sato-dev1`, `sato-dev2`, ... と番号を振る。
 - **開発フロー（サーバー）**: 編集・git・Claude Code は**ホスト側**で行い、Python / uv / kaggle CLI の実行は
-  `docker exec kaggle-dev1 ...` でコンテナに送る（リポジトリは bind mount なので編集は即反映される）。
-  長時間学習は**ホストの tmux** 内で `docker exec -it kaggle-dev1 bash` して手動実行 + tee
+  `docker exec sato-dev1 ...` でコンテナに送る（リポジトリは bind mount なので編集は即反映される）。
+  長時間学習は**ホストの tmux** 内で `docker exec -it sato-dev1 bash` して手動実行 + tee
   （エージェント起動プロセスは環境により ~600秒で kill されることがある）。
 - **GPU 学習（torch 等）が必要なら**サーバーの Docker コンテナ内で行う（nvidia ランタイム有効時）。
   torch は CUDA 同梱 wheel でそのまま GPU が効き、リビルド不要（ベースイメージに CUDA toolkit は不要。

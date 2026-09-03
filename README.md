@@ -7,7 +7,7 @@
 
 ## 初回セットアップチェックリスト
 
-- [ ] `docker-compose.yml` の `name` / `container_name` を `kaggle-dev1` から一意な名前に変更
+- [ ] `docker-compose.yml` の `name` / `container_name` を `sato-dev1` から一意な名前に変更
 - [ ] `pyproject.toml` の `name` / `description` を記入
 - [ ] `.env.example` → `.env` にコピーし、`KAGGLE_API_TOKEN` / `KAGGLE_COMPETITION` 等を記入
 - [ ] `docs/competition/overview.md` にコンペ概要・評価指標・提出形式を記入（`docs/rules/submission.md` の分岐もコンペ種別に合わせて選ぶ）
@@ -19,14 +19,14 @@
 
 ### 1. Docker 環境（Linux サーバー。Windows ローカルは uv 直でこの節は不要）
 
-構成は `docker-compose.yml` 1 ファイル（uv 公式イメージを `kaggle-dev:latest` としてほぼ素のまま使う）。
+構成は `docker-compose.yml` 1 ファイル（uv 公式イメージを `sato-dev:latest` としてほぼ素のまま使う）。
 マシン差分（`HOST_UID` / `HOST_GID`）は `.env`（git 管理外）に寄せる。
 
 ```bash
 cp .env.example .env    # KAGGLE_API_TOKEN 等と HOST_UID/HOST_GID を記入（雛形にコメントで例あり）
 
 docker compose up -d --build     # --build は初回と compose の FROM/RUN 変更時のみ
-docker exec -it kaggle-dev1 bash # コンテナに入る場合。ホストから docker exec kaggle-dev1 <cmd> でも可
+docker exec -it sato-dev1 bash # コンテナに入る場合。ホストから docker exec sato-dev1 <cmd> でも可
 ```
 
 - 2 回目以降は `docker compose up -d` だけで OK。停止は `docker compose down`。
