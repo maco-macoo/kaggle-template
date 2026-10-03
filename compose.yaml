@@ -1,0 +1,17 @@
+# GPU を使うときは .env の COMPOSE_FILE のコメントを外す（Dev Containers では GPU を選ぶ）
+services:
+  dev:
+    image: ghcr.io/astral-sh/uv:python3.12-bookworm
+    user: "${UID:-0}:${GID:-0}"   # Linux では .env の UID/GID で動かす（未設定なら root。Dev Containers では不要）
+    command: bash
+    tty: true                     # コンテナを起動したままにする
+    working_dir: /workspace
+    volumes:
+      - .:/workspace              # リポジトリ
+      - ./.home:/root             # ホーム（ログイン情報・キャッシュを保持。git 管理外）
+    env_file: .env
+    environment:
+      TZ: Asia/Tokyo
+      HOME: /root                 # root 以外で動かすときもホームを固定する
+      UV_LINK_MODE: copy          # マウント先ではハードリンクが使えないことがあるため
+    shm_size: 8gb                 # PyTorch DataLoader 用の共有メモリ

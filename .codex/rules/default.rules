@@ -1,0 +1,42 @@
+# Codex 実行ポリシー
+# 検証: codex execpolicy check --pretty --rules .codex/rules/default.rules -- <command...>
+
+# ===== 安全上の決まり（.claude/settings.json の ask / deny と揃える。AGENTS.md の「安全上の決まり」）=====
+
+# 提出は取り消せないため必ず確認する
+prefix_rule(
+    pattern = ["kaggle", ["competitions", "c"], "submit"],
+    decision = "prompt",
+    justification = "提出は取り消せないため必ず確認する（docs/workflow.md の「提出」）",
+)
+prefix_rule(
+    pattern = ["uv", "run", "kaggle", ["competitions", "c"], "submit"],
+    decision = "prompt",
+    justification = "提出は取り消せないため必ず確認する（docs/workflow.md の「提出」）",
+)
+prefix_rule(
+    pattern = [["tools/nvkg", "./tools/nvkg"], "submit_kernel"],
+    decision = "prompt",
+    justification = "nvidia-kaggle プラグインの提出スクリプト。提出は取り消せないため必ず確認する（docs/workflow.md の「提出」）",
+)
+# prefix_rule は先頭一致しかできないため、submit_kernel.py をパス指定で直接実行する形（`uv run python .../submit_kernel.py`）は防げない。
+# その形は AGENTS.md と docs/workflow.md の「プラグインのスクリプトは tools/nvkg で実行する」指示に頼る。
+
+# .env（認証情報）を表示しない。Codex にはファイル読み取りの deny がなく、prefix_rule は先頭一致しかできない。
+# そのため「閲覧コマンド .env」と「閲覧コマンド オプション1つ .env」の形を禁止する（`head -n 5 .env` のような値付きオプションは防げない）
+_ENV_READERS = ["cat", "head", "tail", "less", "more", "bat", "grep", "rg", "sed", "awk", "nl", "strings", "od", "xxd", "base64"]
+_ENV_PATHS = [".env", "./.env", "/workspace/.env"]
+prefix_rule(pattern = [_ENV_READERS, _ENV_PATHS], decision = "forbidden")
+prefix_rule(
+    pattern = [_ENV_READERS, ["-A", "-v", "-n", "-e", "-r", "-a", "-i", "-p", "."], _ENV_PATHS],
+    decision = "forbidden",
+)
+
+# ===== 確認を減らすための許可 =====
+
+prefix_rule(pattern = [["ls", "tree", "find", "grep", "rg", "cat", "head", "tail", "wc", "du", "echo", "mkdir"]], decision = "allow")
+prefix_rule(pattern = ["git", ["status", "log", "diff", "show", "branch"]], decision = "allow")
+prefix_rule(pattern = ["nvidia-smi"], decision = "allow")
+prefix_rule(pattern = ["uv", ["run", "sync"]], decision = "allow")
+prefix_rule(pattern = [[".venv/bin/python", ".venv/bin/python3"]], decision = "allow")
+prefix_rule(pattern = ["kaggle"], decision = "allow")

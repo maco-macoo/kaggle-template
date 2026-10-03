@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# nvidia-kaggle プラグインのスクリプトを実行する。
+#   tools/nvkg <スクリプト名（.py なし）> [引数...]    例: tools/nvkg kernel_ingest "$KAGGLE_COMPETITION"
+#   tools/nvkg <リポジトリ内の .py> [引数...]          プラグインのモジュールを import するスクリプト用
+# プラグインの場所とバージョンの階層をここで解決する。
+# Claude Code（~/.claude/plugins/cache）を優先し、無ければ Codex（~/.codex/plugins/cache）を使う。
+# どちらのエージェントから呼んでも同じスクリプトを使うよう、優先順を固定している。
+set -euo pipefail
+[ "$#" -gt 0 ] || { echo "使い方: tools/nvkg <スクリプト名または .py のパス> [引数...]" >&2; exit 2; }
+# DB とキャッシュの出力先をリポジトリ直下に揃える。相対パスの引数もここが基準。
+repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+cd -- "$repo_dir"
+dir=""
+for root in ~/.claude/plugins/cache ~/.codex/plugins/cache; do
+    dir=$(ls -d "$root"/nvidia-kaggle/nvidia-kaggle/*/skills/nvidia-kaggle-skill/scripts 2>/dev/null | tail -1 || true)
+    [ -n "$dir" ] && break
+done
+[ -n "$dir" ] || { echo "nvidia-kaggle プラグインが見つかりません（README の「3. エージェント」でインストールする）" >&2; exit 1; }
+if [ -f "$1" ]; then script=$1; else script="$dir/$1.py"; fi
+PYTHONPATH="$dir" exec uv run python "$script" "${@:2}"

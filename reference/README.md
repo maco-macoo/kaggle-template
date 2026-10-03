@@ -1,9 +1,7 @@
-# reference/ — 公開ノートブック・Discussion の収集置き場
+# reference/ — 公開ノートブック・Discussion の要約
 
-- `notebooks/raw/` — `/kaggle-notebook-pull` で取得した公開カーネル（メタデータ込み）
-- `notebooks/summary/` — `/summarize-notebook` による要約（1NB 1ファイル）
-- `discussions/raw/` — `/kaggle-discussion-pull` で取得したトピック（`<topic-id>.md`、UTF-8）
-- `discussions/summary/` — `/summarize-discussion` による要約
-- `INDEX.md` — 収集済み資産の索引（取得日・1行サマリ・リンク）
+- `notebooks/<owner>_<slug>.md` — 公開ノートブックの要約（1 ノートブック 1 ファイル）
+- `discussions/<topic-id>_<slug>.md` — Discussion の要約
+- `INDEX.md` — 要約の索引
 
-raw も含め git 管理する（大物バイナリは .gitignore が除外）。
+本文は DB（`data/`）にあり、要約の ID で引ける。ルールは `docs/workflow.md` の「公開情報の活用」、操作は `/public-insights`。

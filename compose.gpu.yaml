@@ -1,0 +1,10 @@
+# GPU を使うときに compose.yaml に重ねる
+services:
+  dev:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

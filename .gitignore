@@ -1,5 +1,9 @@
-# 認証情報（Kaggle トークン等の環境変数。git には絶対に入れない）
+# 認証情報
 .env
+
+# コンテナのホーム（エージェントのログイン情報・キャッシュ）
+.home/*
+!.home/.gitkeep
 
 # Python / uv
 .venv/
@@ -8,19 +12,20 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 
-# 収集データ（LBスナップショット・リプレイ・特徴量・nvidia-kaggle プラグインDB等。git には入れない）
-data/
+# input/ と exp/*/output/ 以外の生成物（プラグインの DB など）
+data/*
+!data/.gitkeep
 
-# Kaggle からダウンロードした競技データ（大物・再取得可能）
+# 実験の出力
+exp/*/output/
+
+# コンペ提供データ
 input/*
 !input/.gitkeep
 
-# ローカル実行の大物成果物（コンペ種別に応じて適宜追加する）
+# サイズの大きいファイル
 *.json.gz
 *.tar.gz
-
-# 提出ロック（submit-check が作る一時ディレクトリ）
-SUBMIT_LOCK/
 
 # OS
 Thumbs.db

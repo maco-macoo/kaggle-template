@@ -21,24 +21,36 @@
       "Bash(git branch*)",
       "Bash(nvidia-smi*)",
       "Bash(uv run *)",
-      "Bash(uv sync*)",
-      "Bash(.venv/bin/python *)",
-      "Bash(.venv/Scripts/python* *)",
-      "Bash(MPLBACKEND=Agg uv run *)",
-      "Bash(MPLBACKEND=Agg .venv/bin/python *)",
-      "Bash(uv run pytest *)",
-      "Bash(uv run pytest)",
-      "Bash(kaggle *)",
-      "WebFetch(domain:github.com)",
-      "WebFetch(domain:raw.githubusercontent.com)",
-      "WebFetch(domain:arxiv.org)"
+      "Bash(uv sync*)"
     ],
     "deny": [
-      "Read(./.env)"
+      "Read(./.env)",
+      "Bash(*.env)",
+      "Bash(*.env *)",
+      "Bash(*.env\"*)",
+      "Bash(*.env'*)"
     ],
     "ask": [
-      "Bash(kaggle competitions submit*)",
-      "Bash(uv run kaggle competitions submit*)"
+      "Bash(kaggle competitions submit)",
+      "Bash(kaggle competitions submit *)",
+      "Bash(kaggle c submit)",
+      "Bash(kaggle c submit *)",
+      "Bash(uv run kaggle competitions submit)",
+      "Bash(uv run kaggle competitions submit *)",
+      "Bash(uv run kaggle c submit)",
+      "Bash(uv run kaggle c submit *)",
+      "Bash(*submit_kernel*)"
     ]
+  },
+  "enabledPlugins": {
+    "nvidia-kaggle@nvidia-kaggle": true
+  },
+  "extraKnownMarketplaces": {
+    "nvidia-kaggle": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/NVIDIA/nvidia-kaggle.git"
+      }
+    }
   }
 }

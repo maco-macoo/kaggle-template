@@ -1,14 +1,26 @@
 [project]
 name = "kaggle-competition-template"
 version = "0.1.0"
-description = "Add your description here"
+description = "Kaggle コンペの実験・調査・提出を管理するテンプレート"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "httpx>=0.28.1",
     "jupyterlab>=4.6.2",
     "kaggle>=2.2.4",
+    "kagglesdk>=0.1.37",
     "pandas>=3.0.5",
+    "pydantic>=2.13.5",
+    "python-dotenv>=1.2.3",
+    "rich>=15.0.0",
 ]
 
-# コンペごとに `uv add` で追加し uv.lock をコミットする。
-# 例: torch（学習系）, kaggle-environments（シミュレーションコンペ）, lightgbm, etc.
+# 学習・評価ライブラリはコンペごとに uv add で追加する。
+# 初回の uv sync で生成した uv.lock をコミットし、以降は更新も git で管理する。
+[dependency-groups]
+dev = [
+    "ruff>=0.16.8",
+]
+
+[tool.ruff.lint]
+extend-select = ["I"]  # import の並び順（isort 相当）
